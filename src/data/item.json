@@ -1,0 +1,45 @@
+[    
+    {
+    "key": 0,
+    "itemName": "댄디한 코트",
+    "price": 195000,
+    "imgPath": "img/top.png",
+    "quantity": 1,
+    "state": true
+    },
+  
+  {
+    "key":1,
+    "itemName": "샤랄라한 원피스",
+    "price": 200000,
+    "imgPath": "img/sexy.jpg",
+    "quantity": 1,
+    "state": true
+  },
+  
+  {
+    "key":2,
+    "itemName": "똥꼬발랄한 청바지",
+    "price": 280000,
+    "imgPath": "img/bottom.png",
+    "quantity": 1,   
+    "state": false
+  },
+  {
+    "key":3,
+    "itemName": "똥꼬발랄한 청바지",
+    "price": 280000,
+    "imgPath": "img/bottom.png",
+    "quantity": 1,   
+    "state": false
+  },
+  {
+    "key":4,
+    "itemName": "똥꼬발랄한 청바지",
+    "price": 280000,
+    "imgPath": "img/bottom.png",
+    "quantity": 1,   
+    "state": false
+  }
+
+]

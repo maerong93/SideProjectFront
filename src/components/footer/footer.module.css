@@ -1,0 +1,15 @@
+.foot{
+    padding-left: 14em;
+    padding-top: 0.7em;
+    background-color: black;
+    color:white;
+    width:100%;
+    height: 3em;
+    display: flex;
+    bottom:0;
+    left:0;
+    position:absolute;
+}
+.footCont {
+    text-align: center;
+}

@@ -1,0 +1,45 @@
+.container {
+    top: 300px;
+    position: relative;
+    margin: auto;
+    width: 500px;
+    height: 250px;    
+    background-color: lightslategray;
+    border-radius: 50px;
+}
+.all {
+    position: absolute;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    top: 25%;
+}
+.labelId,
+.labelPw {
+    width: 80px;
+    font-size: 3em;
+}
+.title{
+    
+    color:white;
+}
+
+.log {
+    width:100%;
+    align-items: center;
+}
+
+.logUl{
+    color:white;
+    font-size: 0.3rem;
+    list-style: none;
+    float:left;
+}
+
+.lgBtn {
+    background-color: grey;
+    width: 100px;
+    height: 50px;
+    float:left;
+    margin-left: 15px;
+}
