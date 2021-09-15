@@ -42,17 +42,11 @@ function App({authService}) {
 
   const output = window.localStorage.getItem("key");
   const [item1,setItem1] = useState(JSON.parse(output));
-  console.log(item1);
   
 
   const [cartItem,setCartItem] = useState([]);
 
-  let ttt = items.map((item,idx) => {
-    if(item.state == true){
-        //console.log(item)
-      return item;                 
-    }
-  })
+  
   // const [login,setLogin] = useState(
   //   () => JSON.parse(window.localStorage.getItem("login")) || false
   // );
@@ -61,11 +55,18 @@ function App({authService}) {
   //   window.localStorage.setItem("login",JSON.stringify(login));
   // },[login])
 
+  let ttt = items.map((item,idx) => {
+    if(item.state == true){
+        //console.log(item)
+      
+      return item;     
+    }
+    //break
+  })
 
   useEffect(() => {
     setCartItem(ttt);
   },[])
-  
   const [user, userId] = useState({
     "id": 1,
     "userId": 'maerong93',
@@ -137,6 +138,7 @@ function App({authService}) {
                   items={items}
                   item1={item1}
                   cartItem={cartItem}
+                  setCartItem={setCartItem}
                   setItem={setItem} 
                   onQuantityPlus={quantityPlus}
                   onQuantityMinus={quantityMinus}

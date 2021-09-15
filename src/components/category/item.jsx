@@ -6,7 +6,7 @@ const Item = ({menu,setMenu, items,setItem, item1,setItem1 }) => {
     const buttondDelete = useRef();
     const [itemReg,SetItemReg] = useState(false);
     const [item2,setItem2] = useState(()=> JSON.parse(window.localStorage.getItem("item")) || items);
-    console.log(item2)
+
     const regBtn = () => {
         SetItemReg(true);
         console.log(itemReg);
@@ -34,7 +34,7 @@ const Item = ({menu,setMenu, items,setItem, item1,setItem1 }) => {
     const cartOut = (e) => {
         const inx = e.target.dataset.index;
         console.log(inx);
-        //setItem1(true);
+        //setItem1(true); 
         let ttt = item2.map((item)=> {
             if(item.key == inx){
                 console.log(item)

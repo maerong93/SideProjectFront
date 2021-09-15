@@ -2,23 +2,20 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import Navbar from '../nav/navbar';
 import styles from './cart.module.css';
-const Cart = ({menu,setMenu,items,setItem,cartItem,onQuantityPlus,onQuantityMinus,item1}) => {
+const Cart = ({menu,setMenu,items,setItem,cartItem,setCartItem,onQuantityPlus,onQuantityMinus,item1}) => {
 
     const [CheckList, setCheckList] = useState([]);
     const [IdList, setIdList] = useState([]);
-    const [items1, setItems] = useState(items);
+    const [items1, setItems] = useState(JSON.parse(window.localStorage.getItem("item")));
     const [chk,setChk] = useState([]);
 
-    let ttt = items.map((item,idx) => {
-        if(item.state == true){
-            //console.log(item)
-            return item;                 
-        }
-        //console.log(item);
-        //return item;
-    })
-    
-    
+    // let ttt = items.map((item,idx) => {
+    //     if(item.state == true){
+            
+    //         return item;                 
+    //     }
+        
+    // })`
     
     // const dataSet = () => {
     //     setCartItem(ttt);
@@ -31,12 +28,21 @@ const Cart = ({menu,setMenu,items,setItem,cartItem,onQuantityPlus,onQuantityMinu
         
     // }
     //console.log(cartItem[1].price)
+    
+    
+    useEffect(()=>{
+        setItems(items1.filter(item=> item.state !== false ));
+    },[])
+    console.log(items1)
+    
+    
     const [count, setCount] = useState(
         () => JSON.parse(window.localStorage.getItem("count")) || 0
     );
     useEffect(()=>{
         window.localStorage.setItem("count",JSON.stringify(count));
     },[count])
+
     const checkAll = (e) => {
 
         const chkBox = document.getElementById('chkbox').checked;
@@ -48,13 +54,13 @@ const Cart = ({menu,setMenu,items,setItem,cartItem,onQuantityPlus,onQuantityMinu
         }
 
         for(var i=0;i < items.length;i++){
-            chk.push(document.getElementById(`chkBox${i}`).checked);            
+            chk.push(document.getElementById(`chkBox${i}`).checked);
         }
     }
     
-    const quantityPlus = (e) => {        
+    const quantityPlus = (e) => {
         const inx = e.target.dataset.index;
-        onQuantityPlus(items1[inx]);        
+        onQuantityPlus(items1[inx]);
         //console.log(items1)
         console.log(items1[inx])
     }
@@ -80,14 +86,14 @@ const Cart = ({menu,setMenu,items,setItem,cartItem,onQuantityPlus,onQuantityMinu
                 </div>
 
                 {              
-                items.map((item,index) => (
+                items1.map((item,index) => (
 
-                    <div className={styles.list1}>                        
+                    <div className={styles.list1}>
                         <div className={styles.list2}>
                             <input type="checkbox" id={`chkBox${index}`} data-index={index} />
                             <img className={styles.img1} src={item.imgPath} alt="photo" />
                             <p className={styles.itemTitle}>{item.itemName}</p>
-                        </div>                            
+                        </div>
                         <div className={styles.list3}>
                             <div className={styles.quantity}>
                                 <button className={styles.quantityPlus} onClick={quantityPlus} data-index={index}>+</button>
@@ -100,7 +106,6 @@ const Cart = ({menu,setMenu,items,setItem,cartItem,onQuantityPlus,onQuantityMinu
 
                 ))
                 }
-                <button>데이터</button>
             </div>
             <h2 className={styles.title2}>결제금액</h2>
         </div>

@@ -10,6 +10,7 @@ const ItemRegister = ({itemReg,SetItemReg}) => {
         <div className={styles.bg}>
             <div className={styles.bg1}>
                 <h1 className={styles.title}>상품등록</h1>
+                <form action="">
                 <table border="1"className={styles.regTb}>
                     <tr>
                         <td>상품명</td><td><input type="text"/></td>
@@ -21,8 +22,10 @@ const ItemRegister = ({itemReg,SetItemReg}) => {
                         <td>이미지</td><td><input type="file"/></td>
                     </tr>                    
                 </table>
+
                 <span className={styles.clsBtn} onClick={close}>닫기</span>
                 <button className={styles.regBtn}>상품등록</button>
+                </form>
             </div>
         </div>
     )
