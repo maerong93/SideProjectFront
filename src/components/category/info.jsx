@@ -9,17 +9,21 @@ const Info = ({authService,menu,setMenu,user}) => {
 
     }
     const logOut = () => {
-        alert("로그아웃");
-        authService.logout();
+        // alert("로그아웃");
+        // authService.logout();
+        window.localStorage.setItem("login",false);
+        document.location.href="/"
     }
-    useEffect(()=>{
-       authService.onAuthChange(user => {
-           if(!user){
-            history.push('/');
-           }
-       })
-    })
 
+    console.log(window.localStorage.getItem("login"));
+    // useEffect(()=>{
+    //    authService.onAuthChange(user => {
+    //        if(!user){
+    //         history.push('/');
+    //        }
+    //    })
+    // })
+    
     return (
         <div className={styles.container}>
             <ul className={styles.menu}>

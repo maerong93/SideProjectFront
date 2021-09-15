@@ -37,17 +37,35 @@ function App({authService}) {
   ]);
 
   const [items, setItem] = useState(itemJson);
+  
+  localStorage.setItem("key",JSON.stringify(items));
+
+  const output = window.localStorage.getItem("key");
+  const [item1,setItem1] = useState(JSON.parse(output));
+  console.log(item1);
+  
+
   const [cartItem,setCartItem] = useState([]);
+
   let ttt = items.map((item,idx) => {
     if(item.state == true){
         //console.log(item)
       return item;                 
     }
   })
+  // const [login,setLogin] = useState(
+  //   () => JSON.parse(window.localStorage.getItem("login")) || false
+  // );
+  
+  // useEffect(()=> {
+  //   window.localStorage.setItem("login",JSON.stringify(login));
+  // },[login])
+
 
   useEffect(() => {
     setCartItem(ttt);
   },[])
+  
   const [user, userId] = useState({
     "id": 1,
     "userId": 'maerong93',
@@ -57,8 +75,6 @@ function App({authService}) {
   const cookies = new Cookies();
   
   cookies.set('cookie',user.userId);
-
-  console.log(cookies);
 
   const [isRemember, setIsRemember] = useState(false);
 
@@ -95,24 +111,31 @@ function App({authService}) {
       <Switch>
         <Route exact path='/'>
           {
-            !cookies ? <Login authService={authService} user={user} /> :<Category menu={menu} setMenu={setMenu} authService={authService} />
-            
+            window.localStorage.getItem("login") == "false"
+            ? <Login authService={authService} user={user} />
+            : <Info menu={menu} setMenu={setMenu} user={user} authService={authService} />        
           }
-            {/* <Login authService={authService} user={user} /> */}
+          
+         
         </Route>      
         <Route exact path='/main'>
             <Category menu={menu} setMenu={setMenu} cookies={cookies} authService={authService} />
         </Route>
         <Route exact path='/info'>
-            <Info menu={menu} setMenu={setMenu} user={user} authService={authService} />
+            {
+              window.localStorage.getItem("login") == "true"
+              ? <Info menu={menu} setMenu={setMenu} user={user} authService={authService} />
+              : <Login authService={authService} user={user} />
+            }
         </Route>
         <Route exact path='/item'>
-            <Item menu={menu} setMenu={setMenu} items={items} setItem={setItem}/>
+            <Item menu={menu} setMenu={setMenu} item1={item1} setItem1={setItem1} items={items} setItem={setItem}/>
         </Route>
         <Route exact path='/cart'>
             <Cart menu={menu} 
                   setMenu={setMenu} 
                   items={items}
+                  item1={item1}
                   cartItem={cartItem}
                   setItem={setItem} 
                   onQuantityPlus={quantityPlus}
@@ -123,7 +146,8 @@ function App({authService}) {
             <Board menu={menu} setMenu={setMenu}/>
         </Route>
         <Route exact path='/test'>
-           <Test items={items} setItem={setItem} />
+           {/* <Test items={items} setItem={setItem} /> */}
+           <Login authService={authService} user={user} />
         </Route>
       </Switch>
     </BrowserRouter>

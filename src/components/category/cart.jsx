@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import Navbar from '../nav/navbar';
 import styles from './cart.module.css';
-const Cart = ({menu,setMenu,items,setItem,cartItem,onQuantityPlus,onQuantityMinus}) => {
+const Cart = ({menu,setMenu,items,setItem,cartItem,onQuantityPlus,onQuantityMinus,item1}) => {
 
     const [CheckList, setCheckList] = useState([]);
     const [IdList, setIdList] = useState([]);
@@ -17,7 +17,6 @@ const Cart = ({menu,setMenu,items,setItem,cartItem,onQuantityPlus,onQuantityMinu
         //console.log(item);
         //return item;
     })
-    console.log(items[0].imgPath)
     
     
     

@@ -11,12 +11,22 @@ import SignUp from '../signup/signup';
 const Login = ({user, authService}) => {
     const history = useHistory();
     const [modalOn, setModalOn] = useState(false);
-
+    const [login,setLogin] = useState(
+        () => JSON.parse(window.localStorage.getItem("login")) || false
+    );
+    useEffect(()=> {
+        window.localStorage.setItem("login",JSON.stringify(login));
+    },[login])
+    
     const onOpenModal = (e) => {
         e.preventDefault();
         setModalOn(!modalOn);
     }
-
+    
+    const false1 = () => {
+        //window.localStorage.removeItem("login");
+        setLogin(false);
+    }
     // const goToMaker = (userId) => {
     //     history.push({
     //         pathname: '/main',
@@ -24,7 +34,7 @@ const Login = ({user, authService}) => {
     //     });
     //}
 
-
+    console.log(login)
     const googleLog = () => {
         //authService.login().then(data => goToMaker(data.user.uid)).then(console.log);
     }
@@ -41,14 +51,23 @@ const Login = ({user, authService}) => {
     const getData = () => {
         
         //alert(this.props.user.userId)
-        ui.current.value === user.userId && up.current.value === user.userPw
-        ? document.location.href = "/main"
-        : alert("로그인 실패요");
+        if(ui.current.value === user.userId && up.current.value === user.userPw){
+            setLogin(true);
+            document.location.href = "/main";
+            console.log(login)
+        }else{
+            alert("로그인 실패요");
+        }
+        // ui.current.value === user.userId && up.current.value === user.userPw
+        // ? document.location.href = "/main"
+        // : alert("로그인 실패요");
 
-        history.push({
-            pathname: '/main',
-            state: {id:user.userId},
-        });
+        // window.localStorage.getItem("login")
+        
+        // history.push({
+        //     pathname: '/main',
+        //     state: {id:user.userId},
+        // });
 
         // ui == this.userId.map(m => {
         //     return m.userId;
@@ -72,7 +91,6 @@ const Login = ({user, authService}) => {
         //     console.log(response);
         // })
     };
-
     const logOut = () => {
         axios({
             method: 'post',
@@ -92,6 +110,7 @@ const Login = ({user, authService}) => {
     
     return (
         <section className={styles.container}>
+            <button onClick={false1}>false</button>
             <div className={styles.all}>
                 <h1 className={styles.title}>Login</h1>
                 <div className={styles.log}>

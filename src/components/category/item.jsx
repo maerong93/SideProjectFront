@@ -2,11 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import ItemRegister from '../item_register/item_register';
 import Navbar from '../nav/navbar';
 import styles from './item.module.css';
-const Item = ({menu,setMenu, items,setItem }) => {
+const Item = ({menu,setMenu, items,setItem, item1,setItem1 }) => {
     const buttondDelete = useRef();
     const [itemReg,SetItemReg] = useState(false);
-    const [item1,setItem1] = useState(items);
-    
+    const [item2,setItem2] = useState(()=> JSON.parse(window.localStorage.getItem("item")) || items);
+    console.log(item2)
     const regBtn = () => {
         SetItemReg(true);
         console.log(itemReg);
@@ -16,25 +16,26 @@ const Item = ({menu,setMenu, items,setItem }) => {
         const inx = e.target.dataset.index;
         
         console.log(inx);
-        let ttt = item1.map((item)=> {
+        let ttt = item2.map((item)=> {
             if(item.key == inx){
                 //console.log(item)
                 
                 return ({...item, state: false});
             }            
-            return item;
+            return item
             
         })
+        setItem2(ttt)
+        window.localStorage.setItem("item",JSON.stringify(ttt));
         
-        setItem1(ttt)
         //alert("ddd")
     }
-
+    
     const cartOut = (e) => {
         const inx = e.target.dataset.index;
         console.log(inx);
         //setItem1(true);
-        let ttt = item1.map((item)=> {
+        let ttt = item2.map((item)=> {
             if(item.key == inx){
                 console.log(item)
                 
@@ -43,8 +44,10 @@ const Item = ({menu,setMenu, items,setItem }) => {
             return item            
             
         })
-        setItem1(ttt)
-        console.log(ttt);
+        setItem2(ttt)
+        window.localStorage.setItem("item",JSON.stringify(ttt));
+        
+        //console.log(ttt);
     }
 
     return (
@@ -57,7 +60,7 @@ const Item = ({menu,setMenu, items,setItem }) => {
                 <div>
                     <ul className={styles.item}>
                         {  
-                            item1.map((item,i) => (
+                            item2.map((item,i) => (
                                 <li key={item.key} className={styles.item1}>
                                     
                                     <div className={styles.itemPic}>
