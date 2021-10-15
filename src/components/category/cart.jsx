@@ -6,74 +6,106 @@ const Cart = ({menu,setMenu,items,setItem,cartItem,setCartItem,onQuantityPlus,on
 
     const [CheckList, setCheckList] = useState([]);
     const [IdList, setIdList] = useState([]);
-    const [items1, setItems] = useState(JSON.parse(window.localStorage.getItem("item")));
-    const [chk,setChk] = useState([]);
+    const itemParse = JSON.parse(window.localStorage.getItem("item"))
+    for(var i=0;i < itemParse.length;i++){
+        itemParse[i].cartState = false;
+    }
+    
+    const [items1, setItems] = useState([]);
+    const [chk,setChk] = useState(false);
+    //console.log(items1);
 
-    // let ttt = items.map((item,idx) => {
-    //     if(item.state == true){
-            
-    //         return item;                 
-    //     }
-        
-    // })`
-    
-    // const dataSet = () => {
-    //     setCartItem(ttt);
-
-    //     // for(var i =0;i < cartItem.length;i++){
-    //     //     if(cartItem[i].state == false){
-    //     //         setCartItem(cartItem.filter(item => item.state === false));
-    //     //     }
-    //     // }
-        
-    // }
-    //console.log(cartItem[1].price)
-    
-    
     useEffect(()=>{
-        setItems(items1.filter(item=> item.state !== false ));
+        fetch("http://localhost:3000/api/cart",{
+            method:"GET",
+            headers:{
+                'Accept':  'application/json',
+                'Content-Type': 'application/json',
+                'Cache': 'no-cache'
+            },
+            credentials: 'include',
+        })
+        .then(res=> {return res.json()})
+        .then(res => {
+            setItems(res.data)
+        });
+        
+        
     },[])
-    console.log(items1)
     
-    
-    const [count, setCount] = useState(
-        () => JSON.parse(window.localStorage.getItem("count")) || 0
-    );
-    useEffect(()=>{
-        window.localStorage.setItem("count",JSON.stringify(count));
-    },[count])
 
     const checkAll = (e) => {
-
+        //document.getElementById('chkBox0').checked;
         const chkBox = document.getElementById('chkbox').checked;
+        
         const idx = e.target.dataset.index;
+        const chkBoxs = [];
         
-        if(chkBox == true){
-            const chkBoxs = document.getElementById(`chkBox${e}`);
-            console.log(chk);            
-        }
-
-        for(var i=0;i < items.length;i++){
-            chk.push(document.getElementById(`chkBox${i}`).checked);
-        }
-    }
+        for(var i=0;i < items1.length;i++){
+            chkBoxs[i] = document.getElementById(`chkBox${i}`);
+            //const chkBoxs = document.getElementById('chkBox0');
+            
+            if(chkBox == true){
     
-    const quantityPlus = (e) => {
-        const inx = e.target.dataset.index;
-        onQuantityPlus(items1[inx]);
-        //console.log(items1)
-        console.log(items1[inx])
-    }
-
-    const quantityMinus = (e) => {
-        const inx = e.target.dataset.index;
-        onQuantityMinus(items1[inx]);
+                
+                chkBoxs[i].checked = true;
+                setChk(true);       
+            }else{
+                chkBoxs[i].checked = false;
+            }
+    
+        }
         
     }
-    //console.log(items1)
+    const cartOut = (e) => {
+        const chkBoxs = [];
+        const delIdx = [];
+        for(var i=0;i < items1.length;i++){
+            chkBoxs[i] = document.getElementById(`chkBox${i}`);
+            if(chkBoxs[i].checked == true){
+                delIdx[i] = parseInt(chkBoxs[i].dataset.index);
+
+                // fetch(`http://localhost:3000/api/cart/8`,{
+                //     method:"DELETE",
+                //     headers:{
+                //         'Accept':  'application/json',
+                //         'Content-Type': 'application/json',
+                //         'Cache': 'no-cache'
+                //     },
+                //     credentials: 'include',
+                // })
+                // .then(res=> {return res.json()})
+                // .then(res => console.log(res));
+
+
+                fetch(`http://localhost:3000/api/cart`,{
+                    method:"DELETE",
+                    headers:{
+                        'Accept':  'application/json',
+                        'Content-Type': 'application/json',
+                        'Cache': 'no-cache'
+                    },
+                    body:JSON.stringify({
+                        ct_id:delIdx[i]
+                    }),
+                    credentials: 'include',
+                })
+                .then(res=> {return res.json()})
+                .then(res => console.log(res));
+            }
+        }
+
+        //console.log(delIdx);
+        //fetch("http://localhost:3000/api/cart")
+    }
+
+    const payment = () => {
+
+    }
+
     return(
         <div className={styles.container}>
-            <button onClick={()=>setCount(count+1)}>{count}</button>
+           
             <ul className={styles.menu}>
               <Navbar menu={menu} setMenu={setMenu}/>
             </ul>
@@ -81,33 +113,37 @@ const Cart = ({menu,setMenu,items,setItem,cartItem,setCartItem,onQuantityPlus,on
 
             <div className={styles.list}>
                 <div className={styles.check}>
-                    <input type="checkbox" id="chkbox" onChange={checkAll} />
-                    <button className={styles.cartDel}>장바구니 삭제</button>
+                    <input type="checkbox" id="chkbox" onClick={checkAll} />
+                    <button onClick={cartOut}className={styles.cartDel} >장바구니 삭제</button>
                 </div>
+                {
+                    items1.map((item,index) => (
 
-                {              
-                items1.map((item,index) => (
-
-                    <div className={styles.list1}>
-                        <div className={styles.list2}>
-                            <input type="checkbox" id={`chkBox${index}`} data-index={index} />
-                            <img className={styles.img1} src={item.imgPath} alt="photo" />
-                            <p className={styles.itemTitle}>{item.itemName}</p>
-                        </div>
-                        <div className={styles.list3}>
-                            <div className={styles.quantity}>
-                                <button className={styles.quantityPlus} onClick={quantityPlus} data-index={index}>+</button>
-                                <p className={styles.quantityNum}>{item.quantity}</p>
-                                <button className={styles.quantityMinus} onClick={quantityMinus} data-index={index}>-</button>
+                        <div className={styles.list1}>
+                            <div className={styles.list2}>
+                                <input type="checkbox" id={`chkBox${index}`} data-index={item.id} />
+                                <img className={styles.img1} src={item.it_main_img} alt="photo" />
+                                <p className={styles.itemTitle}>{item.it_name}</p>
                             </div>
-                            <p className={styles.price}>{item.price * item.quantity}원</p>
-                        </div>
-                    </div>  
+                            <div className={styles.list3}>
+                                <div className={styles.quantity}>
+                                    <button className={styles.quantityPlus} data-index={index}>+</button>
+                                    <p className={styles.quantityNum}>{item.ct_cnt}</p>
+                                    <button className={styles.quantityMinus}  data-index={index}>-</button>
+                                </div>
+                                <p className={styles.price}>{item.it_price * item.ct_cnt}원</p>
+                            </div>
+                        </div>  
 
-                ))
+                        ))
+                   
                 }
             </div>
-            <h2 className={styles.title2}>결제금액</h2>
+            <div>
+                <h2 className={styles.title2}>결제금액</h2>
+                <button onClick={payment} className={styles.payment}>결제하기</button>
+            </div>
+            
         </div>
     );
 }

@@ -14,13 +14,13 @@ import Cart from './components/category/cart';
 import Board from './components/category/board';
 import Test from './components/test';
 import itemJson from './data/item.json';
-import Cookies from 'universal-cookie/es6';
+import ItemDetail from './components/itemDetail/itemDetail';
+
 
 function App({authService}) {
 
   const history = useHistory();
-  
-
+  const [cookies1,setCookie1,removeCookie1] = useCookies(['token1']);
   const [menu, setMenu] = useState([
     {
         key: 1,
@@ -35,7 +35,6 @@ function App({authService}) {
         title: "장바구니"
     },
   ]);
-
   const [items, setItem] = useState(itemJson);
   
   localStorage.setItem("key",JSON.stringify(items));
@@ -46,15 +45,6 @@ function App({authService}) {
 
   const [cartItem,setCartItem] = useState([]);
 
-  
-  // const [login,setLogin] = useState(
-  //   () => JSON.parse(window.localStorage.getItem("login")) || false
-  // );
-  
-  // useEffect(()=> {
-  //   window.localStorage.setItem("login",JSON.stringify(login));
-  // },[login])
-
   let ttt = items.map((item,idx) => {
     if(item.state == true){
         //console.log(item)
@@ -63,6 +53,20 @@ function App({authService}) {
     }
     //break
   })
+  const moveDetail = (idx) => {
+
+    fetch(`http://localhost:3000/api/item/${idx}`,{
+      method:"get",
+      headers:{
+                  'Accept':  'application/json',
+                  'Content-Type': 'application/json',
+                  'Cache': 'no-cache'
+              },
+      credentials: 'include',
+    })
+    .then(res=> {return res.json})
+    .then(res => console.log(res));
+  }
 
   useEffect(() => {
     setCartItem(ttt);
@@ -72,10 +76,7 @@ function App({authService}) {
     "userId": 'maerong93',
     "userPw": '1234'
   });
-  //const [cookies, setCookie, removeCookie] = useCookies(['cookieId']);
-  const cookies = new Cookies();
-  
-  cookies.set('cookie',user.userId);
+
 
   const [isRemember, setIsRemember] = useState(false);
 
@@ -93,7 +94,6 @@ function App({authService}) {
   // const goLogin = () => {
   //   history.push('/login');
   // }
-
   const quantityPlus = (item) => {
 
     setItem(item.quantity++);
@@ -105,44 +105,61 @@ function App({authService}) {
     item.quantity > 1 && setItem(item.quantity--);
 
   }
-
   return (
     <>
     <BrowserRouter>
       <Switch>
         <Route exact path='/'>
           {
-            window.localStorage.getItem("login") == "false"
-            ? <Login authService={authService} user={user} />
+            window.localStorage.getItem("auth") != 200
+            ? <Login authService={authService} user={user} cookies1={cookies1} setCookie1={setCookie1} removeCookie1={removeCookie1} />
             : <Info menu={menu} setMenu={setMenu} user={user} authService={authService} />        
           }
           
          
         </Route>      
         <Route exact path='/main'>
-            <Category menu={menu} setMenu={setMenu} cookies={cookies} authService={authService} />
+          {
+            window.localStorage.getItem("auth") != 200
+            ?<Login authService={authService} user={user} cookies1={cookies1} setCookie1={setCookie1} removeCookie1={removeCookie1} />
+            :<Category menu={menu} setMenu={setMenu} authService={authService} />
+          }
+            
         </Route>
         <Route exact path='/info'>
             {
-              window.localStorage.getItem("login") == "true"
+              window.localStorage.getItem("auth") == 200
               ? <Info menu={menu} setMenu={setMenu} user={user} authService={authService} />
-              : <Login authService={authService} user={user} />
+              : <Login authService={authService} user={user} cookies1={cookies1} setCookie1={setCookie1} removeCookie1={removeCookie1}/>
             }
         </Route>
         <Route exact path='/item'>
-            <Item menu={menu} setMenu={setMenu} item1={item1} setItem1={setItem1} items={items} setItem={setItem}/>
+          {
+            window.localStorage.getItem("auth") == 200
+            ? <Item menu={menu} setMenu={setMenu} item1={item1} setItem1={setItem1} items={items} setItem={setItem}/>
+            : <Login authService={authService} user={user} cookies1={cookies1} setCookie1={setCookie1} removeCookie1={removeCookie1}/>
+          }
+          
         </Route>
         <Route exact path='/cart'>
-            <Cart menu={menu} 
-                  setMenu={setMenu} 
-                  items={items}
-                  item1={item1}
-                  cartItem={cartItem}
-                  setCartItem={setCartItem}
-                  setItem={setItem} 
-                  onQuantityPlus={quantityPlus}
-                  onQuantityMinus={quantityMinus}
-            />
+            {
+              window.localStorage.getItem("auth") == 200
+              ? <Cart menu={menu} 
+                      setMenu={setMenu} 
+                      items={items}
+                      item1={item1}
+                      cartItem={cartItem}
+                      setCartItem={setCartItem}
+                      setItem={setItem} 
+                      onQuantityPlus={quantityPlus}
+                      onQuantityMinus={quantityMinus}
+                />
+              : <Login authService={authService} user={user} cookies1={cookies1} setCookie1={setCookie1} removeCookie1={removeCookie1}/>
+            }
+            
+        </Route>
+        <Route exact path='/itemDetail'>
+            <ItemDetail menu={menu} setMenu={setMenu}/>
         </Route>
         <Route exact path='/board'>
             <Board menu={menu} setMenu={setMenu}/>
