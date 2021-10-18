@@ -7,7 +7,7 @@ const ItemDetail = ({menu ,setMenu}) => {
     const [items, setItems] = useState([]);
     useEffect(() => {
         const idx = window.localStorage.getItem('idx');
-        fetch(`http://localhost:3000/api/item/${idx}`,{
+        fetch(`http://10.10.27.12:3000/api/item/${idx}`,{
             method:"get",
             headers:{
                         'Accept':  'application/json',
@@ -21,11 +21,11 @@ const ItemDetail = ({menu ,setMenu}) => {
     }, [])
 
     const cartIn = () => {
-        //alert("장바구니에 담겼습니다.");
+        alert("장바구니에 담겼습니다.");
         
         const ct_cnt = parseInt(document.getElementById("ct_cnt").value);
         const it_id = parseInt(items.id);
-        fetch("http://localhost:3000/api/cart",{
+        fetch("http://10.10.27.12:3000/api/cart",{
             method:"POST",
             headers:{
                 'Accept':  'application/json',

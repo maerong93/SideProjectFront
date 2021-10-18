@@ -62,7 +62,7 @@ const Login = ({user, authService,removeCookie,cookies1,setCookie1,removeCookie1
         //     console.log("로그인 실패" +err);
         // })
 
-        fetch("http://localhost:3000/api/user/login",{
+        fetch("http://10.10.27.12:3000/api/user/login",{
             method: "post",
             credentials: 'include',
             headers: {

@@ -16,7 +16,7 @@ const Cart = ({menu,setMenu,items,setItem,cartItem,setCartItem,onQuantityPlus,on
     //console.log(items1);
 
     useEffect(()=>{
-        fetch("http://localhost:3000/api/cart",{
+        fetch("http://10.10.27.12:3000/api/cart",{
             method:"GET",
             headers:{
                 'Accept':  'application/json',
@@ -58,6 +58,7 @@ const Cart = ({menu,setMenu,items,setItem,cartItem,setCartItem,onQuantityPlus,on
         
     }
     const cartOut = (e) => {
+        alert("상품이 삭제 되었습니다.")
         const chkBoxs = [];
         const delIdx = [];
         for(var i=0;i < items1.length;i++){
@@ -78,7 +79,7 @@ const Cart = ({menu,setMenu,items,setItem,cartItem,setCartItem,onQuantityPlus,on
                 // .then(res => console.log(res));
 
 
-                fetch(`http://localhost:3000/api/cart`,{
+                fetch(`http://10.10.27.12:3000/api/cart`,{
                     method:"DELETE",
                     headers:{
                         'Accept':  'application/json',
